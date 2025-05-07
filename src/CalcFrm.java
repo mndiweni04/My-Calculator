@@ -10,9 +10,27 @@ public class CalcFrm extends JFrame implements KeyListener{
      */
     public CalcFrm() {
         initComponents();
-        this.addKeyListener(this);
+        initListeners();
+        initWindowSettings();
+    }
+    
+    private void initListeners(){
+        JButton[] buttons = { btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8,
+            btn9, btnAdd, btnMinus, btnMulti, btnDivide, btnDeci, btnPercent};
+        
+        for (JButton btn : buttons) {
+            btn.addActionListener(e -> {
+                InputBtn(e); 
+                txfEquation.requestFocusInWindow();
+            });
+        }
+    }
+    
+    private void initWindowSettings(){
         setFocusable(true);
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
+        txfEquation.addKeyListener(this);
+        txfEquation.requestFocusInWindow();
     }
 
     /**
@@ -73,6 +91,11 @@ public class CalcFrm extends JFrame implements KeyListener{
         btnClear.setText("CE");
         btnClear.setName(""); // NOI18N
         btnClear.setPreferredSize(new java.awt.Dimension(65, 65));
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
 
         btnDivide.setFont(new java.awt.Font("Nirmala UI", 1, 18)); // NOI18N
         btnDivide.setText("÷");
@@ -346,72 +369,60 @@ public class CalcFrm extends JFrame implements KeyListener{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn7ActionPerformed
-        InputNum(evt);
     }//GEN-LAST:event_btn7ActionPerformed
 
     private void btn8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn8ActionPerformed
-        InputNum(evt);
     }//GEN-LAST:event_btn8ActionPerformed
 
     private void btn0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn0ActionPerformed
-        InputNum(evt);
     }//GEN-LAST:event_btn0ActionPerformed
 
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
-        InputNum(evt);
     }//GEN-LAST:event_btn1ActionPerformed
 
     private void btn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn2ActionPerformed
-        InputNum(evt);
     }//GEN-LAST:event_btn2ActionPerformed
 
     private void btn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn3ActionPerformed
-        InputNum(evt);
     }//GEN-LAST:event_btn3ActionPerformed
 
     private void btn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn4ActionPerformed
-        InputNum(evt);
     }//GEN-LAST:event_btn4ActionPerformed
 
     private void btn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn5ActionPerformed
-        InputNum(evt);
     }//GEN-LAST:event_btn5ActionPerformed
 
     private void btn6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn6ActionPerformed
-        InputNum(evt);
     }//GEN-LAST:event_btn6ActionPerformed
 
     private void btn9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn9ActionPerformed
-        InputNum(evt);
     }//GEN-LAST:event_btn9ActionPerformed
 
     private void btnPercentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPercentActionPerformed
-        InputOp(evt);
     }//GEN-LAST:event_btnPercentActionPerformed
 
     private void btnDivideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDivideActionPerformed
-        InputOp(evt);
     }//GEN-LAST:event_btnDivideActionPerformed
 
     private void btnMultiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultiActionPerformed
-        InputOp(evt);
     }//GEN-LAST:event_btnMultiActionPerformed
 
     private void btnMinusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinusActionPerformed
-        InputOp(evt);
     }//GEN-LAST:event_btnMinusActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        InputOp(evt);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnEqualsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEqualsActionPerformed
-        InputOp(evt);
     }//GEN-LAST:event_btnEqualsActionPerformed
 
     private void btnDeciActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeciActionPerformed
-        InputOp(evt);
     }//GEN-LAST:event_btnDeciActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+        txfEquation.setText("");
+    }//GEN-LAST:event_btnClearActionPerformed
 
     /**
      * @param args the command line arguments
@@ -425,45 +436,35 @@ public class CalcFrm extends JFrame implements KeyListener{
     }
     
     /*Method that reads the value of the jbutton that is pressed and adds that 
-    value to the equation text field, in this case Numbers*/
-    public void InputNum(ActionEvent e){
-        JButton clickButton = (JButton) e.getSource();
-        int iValue = Integer.parseInt(clickButton.getText());
-        txfEquation.setText(txfEquation.getText() + iValue);
-    }
-    
-    /*Method that reads the value of the jbutton that is pressed and adds that 
-    value to the equation text field, in this case mathematical operators*/
-    public void InputOp(ActionEvent e){
-        JButton clickButton = (JButton) e.getSource();
-        String sChar = clickButton.getText();
-        txfEquation.setText(txfEquation.getText() + sChar);
-    }
-    
-    @Override
-    public void keyTyped(KeyEvent e){
-        
+    value to the equation text field, both nums and operators*/
+    public void InputBtn(ActionEvent ex){
+        JButton clickButton = (JButton) ex.getSource();
+        String sValue = clickButton.getText();
+        txfEquation.setText(txfEquation.getText() + sValue);
     }
     
     /*Add specific keys pressed to equation text field. These keys include nums from keypad 
     and nums from top of keyboard*/
     @Override
     public void keyPressed(KeyEvent e){
-        int keyCode = e.getKeyCode();
-        
-        if ((keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9) || 
-        (keyCode >= KeyEvent.VK_NUMPAD0 && keyCode <= KeyEvent.VK_NUMPAD9)) {
-        
-        txfEquation.setText(txfEquation.getText() + e.getKeyChar());
-        } 
-        else {
-            e.consume(); 
-        }  
+          
     }
     
     @Override
     public void keyReleased(KeyEvent e){
         System.out.println(e.getKeyChar()+ ": " + e.getKeyCode());
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent e){
+        char keyChar = e.getKeyChar();
+        
+        if (Character.isDigit(keyChar) || "+-*/.%".indexOf(keyChar) != -1) {
+            txfEquation.setText(txfEquation.getText() + e.getKeyChar());
+        } 
+        else {
+            e.consume(); 
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
